@@ -12,7 +12,7 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 20
       java: corretto17
     commands:
       - export ANDROID_SDK_ROOT=/usr/local/android-sdk
@@ -43,13 +43,7 @@ phases:
 
   post_build:
     commands:
-      - echo "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-key.json
-      - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json
-      - firebase appdistribution:distribute
-        android/app/build/outputs/apk/release/app-release-unsigned.apk
-        --app "$FIREBASE_APP_ID"
-        --groups "testers"
-        --release-notes "Automated build from commit $CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - echo "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-key.json && export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json && firebase appdistribution:distribute android/app/build/outputs/apk/release/app-release-unsigned.apk --app "$FIREBASE_APP_ID" --groups "testers" --release-notes "Automated build from commit $CODEBUILD_RESOLVED_SOURCE_VERSION"
 
 artifacts:
   files:
